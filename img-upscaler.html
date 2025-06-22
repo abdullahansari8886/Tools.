@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upscaler Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- AdMob Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-3940256099942544/6300978111"
+        crossorigin="anonymous"></script>
+    
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #34a853;
+            --accent-color: #ea4335;
+            --light-color: #f8f9fa;
+            --dark-color: #202124;
+            --gray-color: #5f6368;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            padding: 0;
+            margin: 0;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        /* Ad Containers */
+        .ad-container {
+            background-color: white;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin: 2rem 0;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .native-ad-container {
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+        }
+        
+        /* Tool Interface */
+        .tool-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--gray-color);
+            border-radius: var(--border-radius);
+            padding: 3rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        #preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            display: none;
+            margin: 0 auto;
+        }
+        
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .option-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        select, input[type="range"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+        }
+        
+        /* Pricing Plans */
+        .pricing-plans {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .pricing-plan {
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .pricing-plan.featured {
+            border: 2px solid var(--primary-color);
+            position: relative;
+        }
+        
+        .pricing-plan.featured::before {
+            content: "Best Value";
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        /* Payment Form */
+        .payment-form {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn-premium {
+            background-color: var(--accent-color);
+        }
+        
+        .btn-secondary {
+            background-color: var(--gray-color);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .pricing-plans {
+                flex-direction: column;
+            }
+            
+            .options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="/" class="logo">Image Upscaler Pro</a>
+            <div id="user-status">Free Plan</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Top Banner Ad -->
+        <div class="ad-container">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-app-pub-3940256099942544/6300978111"
+                 data-ad-slot="1234567890"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+        
+        <!-- Main Tool -->
+        <div class="tool-container">
+            <h2>Image Upscaler</h2>
+            
+            <div class="upload-area" id="upload-area">
+                <p>Drag & drop your image here or click to browse</p>
+                <img id="preview-image" alt="Preview">
+                <input type="file" id="file-input" accept="image/*" style="display: none;">
+            </div>
+            
+            <div class="options">
+                <div class="option-group">
+                    <h3>Upscale Factor</h3>
+                    <select id="upscale-factor">
+                        <option value="2">2x</option>
+                        <option value="4" class="pro-feature">4x (Pro)</option>
+                        <option value="6" class="pro-feature">6x (Pro)</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <h3>Output Format</h3>
+                    <select id="output-format">
+                        <option value="jpeg">JPEG</option>
+                        <option value="png">PNG</option>
+                        <option value="webp" class="pro-feature">WebP (Pro)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="btn" id="process-btn">Upscale Image</button>
+            <button class="btn btn-premium" id="pro-btn" style="display: none;">Pro Feature</button>
+            
+            <!-- Payment Form (hidden by default) -->
+            <div class="payment-form" id="payment-form">
+                <h3>Upgrade to Pro</h3>
+                
+                <div class="form-group">
+                    <label>Card Number</label>
+                    <input type="text" placeholder="1234 5678 9012 3456" id="card-number">
+                </div>
+                
+                <div class="form-group">
+                    <label>Expiration Date</label>
+                    <input type="text" placeholder="MM/YY" id="expiry-date">
+                </div>
+                
+                <div class="form-group">
+                    <label>CVV</label>
+                    <input type="text" placeholder="123" id="cvv">
+                </div>
+                
+                <div class="form-group">
+                    <label>Name on Card</label>
+                    <input type="text" placeholder="John Doe" id="card-name">
+                </div>
+                
+                <button class="btn btn-premium" id="submit-payment">Complete Payment</button>
+                <button class="btn btn-secondary" id="cancel-payment">Cancel</button>
+            </div>
+        </div>
+        
+        <!-- Native Ad -->
+        <div id="native-ad-container" class="native-ad-container">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-3940256099942544"
+                crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-format="fluid"
+                data-ad-layout-key="-fb+5w+4e-db+86"
+                data-ad-client="ca-app-pub-3940256099942544"
+                data-ad-slot="9876543210"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+        
+        <!-- Pricing Plans -->
+        <section id="pricing">
+            <h2 style="text-align: center;">Upgrade for More Features</h2>
+            
+            <div class="pricing-plans">
+                <div class="pricing-plan">
+                    <h3>Free Trial</h3>
+                    <div class="price">$0 <small>/ 10 days</small></div>
+                    <ul>
+                        <li>✔ Basic 2x upscaling</li>
+                        <li>✔ Watermarked results</li>
+                        <li>✔ 3 images per day</li>
+                        <li>✖ No advanced features</li>
+                    </ul>
+                    <button class="btn" id="free-trial-btn">Start Free Trial</button>
+                </div>
+                
+                <div class="pricing-plan">
+                    <h3>Monthly Pro</h3>
+                    <div class="price">$2.50 <small>/ month</small></div>
+                    <ul>
+                        <li>✔ Up to 6x upscaling</li>
+                        <li>✔ No watermarks</li>
+                        <li>✔ 50 images per day</li>
+                        <li>✔ All formats</li>
+                    </ul>
+                    <button class="btn btn-premium" id="monthly-plan-btn">Get Monthly</button>
+                </div>
+                
+                <div class="pricing-plan featured">
+                    <h3>Yearly Pro</h3>
+                    <div class="price">$8.99 <small>/ year</small></div>
+                    <ul>
+                        <li>✔ All Pro features</li>
+                        <li>✔ Unlimited images</li>
+                        <li>✔ Priority processing</li>
+                        <li>✔ Save 70%</li>
+                    </ul>
+                    <button class="btn btn-premium" id="yearly-plan-btn">Get Yearly</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Bottom Banner Ad -->
+        <div class="ad-container">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-app-pub-3940256099942544/6300978111"
+                 data-ad-slot="1234567890"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+
+    <script>
+        // App State
+        const appState = {
+            isPro: false,
+            freeTrialActive: false,
+            freeTrialDaysLeft: 10,
+            adCount: 0,
+            currentImage: null
+        };
+        
+        // DOM Elements
+        const userStatus = document.getElementById('user-status');
+        const processBtn = document.getElementById('process-btn');
+        const proBtn = document.getElementById('pro-btn');
+        const paymentForm = document.getElementById('payment-form');
+        const freeTrialBtn = document.getElementById('free-trial-btn');
+        const monthlyPlanBtn = document.getElementById('monthly-plan-btn');
+        const yearlyPlanBtn = document.getElementById('yearly-plan-btn');
+        const submitPaymentBtn = document.getElementById('submit-payment');
+        const cancelPaymentBtn = document.getElementById('cancel-payment');
+        const upscaleFactor = document.getElementById('upscale-factor');
+        const outputFormat = document.getElementById('output-format');
+        const fileInput = document.getElementById('file-input');
+        const uploadArea = document.getElementById('upload-area');
+        const previewImage = document.getElementById('preview-image');
+        
+        // Initialize AdMob Ads
+        function initializeAds() {
+            // Load banner ads (already in HTML)
+            
+            // Load native ad
+            loadNativeAd();
+            
+            // Show initial interstitial
+            setTimeout(showInterstitial, 15000);
+        }
+        
+        // Native Ad
+        function loadNativeAd() {
+            if (typeof google !== 'undefined') {
+                new google.ads.NativeAd({
+                    adUnitId: 'ca-app-pub-3940256099942544/2247696110',
+                    format: 'in-article',
+                    target: '#native-ad-container',
+                    media: {
+                        template: 'image',
+                        size: [300, 200]
+                    }
+                }).load();
+            }
+        }
+        
+        // Interstitial Ad
+        function showInterstitial() {
+            if (typeof google !== 'undefined') {
+                const interstitialAd = new google.ads.InterstitialAd();
+                interstitialAd.load({
+                    request: new google.ads.Request({
+                        adUnitId: 'ca-app-pub-3940256099942544/1033173712',
+                        width: '100%',
+                        height: '100%'
+                    })
+                });
+                
+                interstitialAd.on('load', function() {
+                    interstitialAd.show();
+                });
+            }
+        }
+        
+        // Rewarded Ad
+        function showRewardedAd() {
+            if (typeof google !== 'undefined') {
+                const rewardedAd = new google.ads.RewardedAd();
+                rewardedAd.load({
+                    request: new google.ads.Request({
+                        adUnitId: 'ca-app-pub-3940256099942544/5224354917'
+                    })
+                });
+                
+                rewardedAd.on('rewarded', function(reward) {
+                    startFreeTrial();
+                });
+                
+                rewardedAd.on('load', function() {
+                    rewardedAd.show();
+                });
+            } else {
+                // Fallback if AdMob not loaded
+                if (confirm("Watch an ad to start your free trial?")) {
+                    startFreeTrial();
+                }
+            }
+        }
+        
+        // Update UI based on plan
+        function updateUI() {
+            if (appState.isPro) {
+                userStatus.textContent = "Pro Member";
+                userStatus.style.color = "var(--accent-color)";
+                document.querySelectorAll('.pro-feature').forEach(el => {
+                    el.disabled = false;
+                    el.style.opacity = 1;
+                });
+                proBtn.style.display = 'none';
+            } 
+            else if (appState.freeTrialActive) {
+                userStatus.textContent = `Free Trial (${appState.freeTrialDaysLeft} days left)`;
+                userStatus.style.color = "var(--secondary-color)";
+                document.querySelectorAll('.pro-feature').forEach(el => {
+                    el.disabled = false;
+                    el.style.opacity = 1;
+                });
+                proBtn.style.display = 'none';
+            }
+            else {
+                userStatus.textContent = "Free Plan";
+                userStatus.style.color = "var(--gray-color)";
+                document.querySelectorAll('.pro-feature').forEach(el => {
+                    el.disabled = true;
+                    el.style.opacity = 0.5;
+                });
+                proBtn.style.display = 'inline-block';
+            }
+        }
+        
+        // Start free trial
+        function startFreeTrial() {
+            appState.freeTrialActive = true;
+            appState.freeTrialDaysLeft = 10;
+            updateUI();
+            
+            // In a real app, you would save this to localStorage or backend
+            localStorage.setItem('freeTrial', JSON.stringify({
+                active: true,
+                expires: new Date().getTime() + (10 * 24 * 60 * 60 * 1000)
+            }));
+            
+            alert('Your 10-day free trial has started! Pro features are now unlocked.');
+        }
+        
+        // Handle image upload
+        function handleImageUpload(file) {
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file (JPEG, PNG, etc.)');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+                uploadArea.querySelector('p').style.display = 'none';
+                appState.currentImage = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // Check pro features before processing
+        function checkProFeatures() {
+            const selectedFactor = upscaleFactor.value;
+            const selectedFormat = outputFormat.value;
+            
+            if ((selectedFactor > 2 || selectedFormat === 'webp') && !appState.isPro && !appState.freeTrialActive) {
+                if (confirm('This feature requires Pro. Upgrade now or start a free trial?')) {
+                    document.getElementById('pricing').scrollIntoView();
+                }
+                return false;
+            }
+            return true;
+        }
+        
+        // Process image (simulated)
+        function processImage() {
+            if (!appState.currentImage) {
+                alert('Please upload an image first');
+                return;
+            }
+            
+            if (checkProFeatures()) {
+                const factor = upscaleFactor.value;
+                const format = outputFormat.value;
+                
+                // Simulate processing
+                alert(`Upscaling image to ${factor}x in ${format.toUpperCase()} format...`);
+                appState.adCount++;
+                
+                // Show interstitial every 3 actions
+                if (appState.adCount % 3 === 0) {
+                    showInterstitial();
+                }
+            }
+        }
+        
+        // Event Listeners
+        processBtn.addEventListener('click', processImage);
+        
+        proBtn.addEventListener('click', function() {
+            document.getElementById('pricing').scrollIntoView();
+        });
+        
+        freeTrialBtn.addEventListener('click', function() {
+            showRewardedAd();
+        });
+        
+        monthlyPlanBtn.addEventListener('click', function() {
+            paymentForm.style.display = 'block';
+            document.getElementById('payment-form').scrollIntoView();
+        });
+        
+        yearlyPlanBtn.addEventListener('click', function() {
+            paymentForm.style.display = 'block';
+            document.getElementById('payment-form').scrollIntoView();
+        });
+        
+        submitPaymentBtn.addEventListener('click', function() {
+            // In a real app, validate and process payment
+            const cardNumber = document.getElementById('card-number').value;
+            if (!cardNumber || cardNumber.length < 16) {
+                alert('Please enter a valid card number');
+                return;
+            }
+            
+            appState.isPro = true;
+            updateUI();
+            paymentForm.style.display = 'none';
+            alert('Payment successful! Pro features unlocked.');
+        });
+        
+        cancelPaymentBtn.addEventListener('click', function() {
+            paymentForm.style.display = 'none';
+        });
+        
+        // File upload handlers
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length) {
+                handleImageUpload(e.target.files[0]);
+            }
+        });
+        
+        uploadArea.addEventListener('click', function() {
+            fileInput.click();
+        });
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadArea.style.borderColor = var(--primary-color);
+        });
+        
+        uploadArea.addEventListener('dragleave', function() {
+            uploadArea.style.borderColor = var(--gray-color);
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadArea.style.borderColor = var(--gray-color);
+            if (e.dataTransfer.files.length) {
+                handleImageUpload(e.dataTransfer.files[0]);
+            }
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAds();
+            updateUI();
+            
+            // Check for existing trial in localStorage
+            const savedTrial = localStorage.getItem('freeTrial');
+            if (savedTrial) {
+                const trialData = JSON.parse(savedTrial);
+                if (trialData.active && new Date().getTime() < trialData.expires) {
+                    const daysLeft = Math.ceil((trialData.expires - new Date().getTime()) / (1000 * 60 * 60 * 24));
+                    appState.freeTrialActive = true;
+                    appState.freeTrialDaysLeft = daysLeft;
+                    updateUI();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
